@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nouvelle demande de lien de vérification</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+      }
+
+      .container {
+        max-width: 360px;
+        margin: 30px auto;
+        background-color: #fff;
+        padding-top: 40px;
+        padding-right: 40px;
+        padding-left: 40px;
+        padding-bottom: 60px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        margin-bottom: 30px;
+        text-align: center;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+        margin-right: 28px;
+      }
+
+      label {
+        font-weight: bold;
+      }
+
+      input[type="email"] {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      button {
+        display: block;
+        font-size: 15px;
+        width: 100%;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      #message {
+        margin-top: 20px;
+        text-align: center;
+        color: #445669;
+      }
+
+      #loading-spinner {
+        position: fixed;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+      }
+
+      .lds-ring {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+      }
+      .lds-ring div {
+        box-sizing: border-box;
+        display: block;
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        margin: 20px;
+        border: 5px solid #007bff; /* Change the color as needed */
+        border-radius: 50%;
+        animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        border-color: #007bff transparent transparent transparent;
+      }
+      .lds-ring div:nth-child(1) {
+        animation-delay: -0.45s;
+      }
+      .lds-ring div:nth-child(2) {
+        animation-delay: -0.3s;
+      }
+      .lds-ring div:nth-child(3) {
+        animation-delay: -0.15s;
+      }
+      @keyframes lds-ring {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Obtenir un nouveau lien</h2>
+      <div id="message"></div>
+      <div id="loading-spinner" style="display: none; text-align: center">
+        <div class="lds-ring">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+      <form id="emailForm">
+        <div class="form-group">
+          <label for="email">Email :</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Entrez votre adresse email"
+            required
+          />
+        </div>
+        <button type="submit">Obtenir le lien</button>
+      </form>
+    </div>
+    <script>
+      async function requestNewVerificationLink(email) {
+        try {
+          //Show the spinner
+          document.getElementById("loading-spinner").style.display = "block";
+
+          const res = await fetch("<%=sendVerificationLinkRoute%>", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email }),
+          });
+          document.getElementById("loading-spinner").style.display = "none";
+
+          if (res.status === 400)
+            document.getElementById("message").textContent =
+              "Email non trouvé. Veuillez créer un compte d'abord!";
+          else if (res.status === 500)
+            document.getElementById("message").textContent =
+              "Une erreur s'est produite lors de l'envoi du courriel de vérification. Réessayez!";
+          else if (res.status === 200)
+            document.getElementById(
+              "message"
+            ).textContent = `Un nouveau lien de vérification a été envoyé à l'adresse: ${email}. Veuillez consulter votre boîte électronique!`;
+        } catch (e) {
+          document.getElementById("message").textContent =
+            "Une erreur s'est produite lors de l'envoi du courriel de vérification. Réessayez!";
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const emailForm = document.getElementById("emailForm");
+        const messageDiv = document.getElementById("message");
+
+        emailForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          const formData = new FormData(emailForm);
+          const email = formData.get("email");
+          document.getElementById("message").textContent = "";
+
+          requestNewVerificationLink(email)
+            .then(() => {
+              // Reset the form
+              //emailForm.reset();
+            })
+            .catch((error) => {
+              messageDiv.textContent =
+                "Une erreur s'est produite lors de l'envoi du courriel de vérification. Réessayez!";
+            });
+        });
+      });
+    </script>
+  </body>
+</html>

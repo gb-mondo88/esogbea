@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Erreur de vérification de l'email.</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .container {
+        max-width: 500px;
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 40px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      h1 {
+        color: #333;
+      }
+
+      p {
+        color: #666;
+        margin-bottom: 20px;
+      }
+
+      .success-icon {
+        color: #27ae60;
+        font-size: 64px;
+        margin-bottom: 20px;
+      }
+
+      .button {
+        display: inline-block;
+        background-color: #3498db;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s;
+      }
+
+      .button:hover {
+        background-color: #2980b9;
+      }
+
+      .logo {
+        width: 80px;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img
+        src="https://firebasestorage.googleapis.com/v0/b/esogbea-7f186.appspot.com/o/esogbea%2Flogo%2Flogo_white_theme.png?alt=media&token=fca41bd2-3afb-491b-b286-0c9f1a3d03e2"
+        alt="Logo Esogbea"
+        class="logo"
+      />
+      <i class="fas fa-check-circle success-icon"></i>
+      <h1 style="color: #521e2b">Erreur</h1>
+      <p>
+        Votre adresse e-mail n'a pas pu être vérifiée. Une erreur s'est survenue
+        lors du processus
+      </p>
+      <a href="<%=retryLink%>" class="button">Réessayer</a>
+    </div>
+  </body>
+</html>
