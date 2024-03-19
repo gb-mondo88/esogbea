@@ -1,6 +1,6 @@
 //This file initialize the firebase admin instance
 const admin = require("firebase-admin");
-const serviceAccount = require("./esogbeaServiceAccount.json");
+const serviceAccount = require("./packages/esogbea/v/latest/1/esogbeaServiceAccount.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
